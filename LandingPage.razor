@@ -84,7 +84,6 @@
 
     async Task AddRandomProduct()
     {
-        Random random = new Random();
         int min = 1;
         int max = 1;
         if (productcontext.Categories.Any())
@@ -94,6 +93,7 @@
             max = AllCats.Last() + 1;
         }
 
+        Random random = new Random();
         var Newprod = new Product
             {
                 Name = MagicalProductNameCreator(max),
