@@ -8,7 +8,7 @@
     <MudMainContent Class="pt-0">
         <MudTabs Elevation="4" Rounded="true" Centered="true" Color="@Color.Primary">
             <MudTabPanel Text="Intro">
-                <WpfApp1.RazorFiles.Intro/>
+                <WpfApp1.RazorFiles.Intro />
             </MudTabPanel>
             <MudTabPanel Text="Show Data" Disabled="!showdata">
                 @if (showdata)
@@ -17,18 +17,26 @@
                     {
                         @foreach (var item in productcontext.Categories)
                         {
-                            <MudCard>
+                            <MudCard Class="ma-1">
                                 <MudCardContent>
-                                    <MudText>@item.Name</MudText>
+                                    <MudText><b>Catagory Name:</b> @item.Name</MudText>
+
                                     @foreach (var SubItem in item.Products)
                                     {
-                                        <MudText Typo="Typo.body2">@SubItem.Name</MudText>
+                                        <MudText Typo="Typo.body2"><b>Product Name:</b> @SubItem.Name</MudText>
+                                        <MudText><b>ProductId:</b> @SubItem.ProductId</MudText>
+                                        <MudText><b>CategoryId:</b> @SubItem.CategoryId</MudText>
                                     }
                                 </MudCardContent>
                             </MudCard>
                         }
                     }
                 }
+            </MudTabPanel>
+            <MudTabPanel Text="THE BUTTON" Disabled="!showdata">
+                <MudItem Class="pa-8 ma-8">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" OnClick="AddRandom">Add Random Data to Database</MudButton>
+                </MudItem>
             </MudTabPanel>
             <MudTabPanel Text="New Product">
                 <WpfApp1.RazorFiles.Product />
@@ -37,18 +45,11 @@
                 <WpfApp1.RazorFiles.Category />
             </MudTabPanel>
             <MudTabPanel Text="Sales" Disabled="!showdata">
-      <WpfApp1.RazorFiles.SalesGraph/>
-            </MudTabPanel>         
-            <MudTabPanel Text="Other" Disabled="!showdata">
-                <MudItem Class="pa-8 ma-8">
+                <WpfApp1.RazorFiles.SalesGraph />
+            </MudTabPanel>
 
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" OnClick="AddRandom">Add Random Data to Database</MudButton>
-                </MudItem>
-                
-       
-            </MudTabPanel>  
             <MudTabPanel Text="Loader" Disabled="!showdata">
-<WpfApp1.RazorFiles.Loader/>
+                <WpfApp1.RazorFiles.Loader />
             </MudTabPanel>
         </MudTabs>
     </MudMainContent>
