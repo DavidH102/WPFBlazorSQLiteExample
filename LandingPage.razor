@@ -1,0 +1,79 @@
+﻿@inject ProductContext productcontext
+<MudThemeProvider IsDarkMode="true" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudMainContent  Class="pt-0">
+        <MudTabs Elevation="4" Rounded="true" Centered="true" Color="@Color.Primary">
+            <MudTabPanel Text="Intro">
+          
+
+            </MudTabPanel>
+            <MudTabPanel Text="Show Data" Disabled="!showdata">
+                @if (showdata)
+                {
+                    @if (productcontext.Products.Any())
+                    {
+                        @foreach (var item in productcontext.Categories)
+                        {
+                            <MudCard>
+                                <MudCardContent>
+                                    <MudText>@item.Name</MudText>
+                                    @foreach (var SubItem in item.Products)
+                                    {
+                                        <MudText Typo="Typo.body2">@SubItem.Name</MudText>
+                                    }
+
+                                </MudCardContent>
+
+                            </MudCard>
+                        }
+                    }
+                }
+            </MudTabPanel>
+            <MudTabPanel Text="New Product">
+          
+
+
+            </MudTabPanel>
+            <MudTabPanel Text="New Category" Disabled="!showdata">
+              
+
+            </MudTabPanel>     
+            <MudTabPanel Text="New Category" Disabled="!showdata">
+
+                <button class="btn btn-primary" @onclick="AddRandom">Click me</button>
+
+            </MudTabPanel>
+        </MudTabs>
+        
+       
+
+
+
+    </MudMainContent>
+</MudLayout>
+@code {
+    private int currentCount = 0;
+    bool showdata;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await productcontext.Database.EnsureCreatedAsync();
+
+        await AddRandom();
+        showdata = true;
+    }
+
+
+    async Task AddRandom()
+    {
+        productcontext.Attach(new Product { Name = "Name", Category = new Category { Name = "cat name" } });
+        await productcontext.SaveChangesAsync();
+    }
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}
