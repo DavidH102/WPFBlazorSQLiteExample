@@ -23,7 +23,7 @@
 
                                     @foreach (var SubItem in item.Products)
                                     {
-                                        <MudText Typo="Typo.body2"><b>Product Name:</b> @SubItem.Name <b>ProductId:</b> @SubItem.ProductId</MudText>                                  
+                                        <MudText Typo="Typo.body2"><b>Product Name:</b> @SubItem.Name <b>ProductId:</b> @SubItem.ProductId</MudText>
                                     }
                                 </MudCardContent>
                             </MudCard>
@@ -93,12 +93,17 @@
             min = AllCats.First();
             max = AllCats.Last() + 1;
         }
-        productcontext.Attach(new Product { Name = MagicalProductNameCreator(max), CategoryId = random.Next(min, max), });
-        await productcontext.SaveChangesAsync();
-        Snackbar.Add("New Item Added", Severity.Normal);
-  
-    }
 
+        var Newprod = new Product
+            {
+                Name = MagicalProductNameCreator(max),
+                CategoryId = random.Next(min, max),
+            };
+
+        productcontext.Attach(Newprod);
+        await productcontext.SaveChangesAsync();
+        Snackbar.Add("You Added " + Newprod.Name, Severity.Normal);
+    }
 
     public string MagicalProductNameCreator(int requestedLength)
     {
