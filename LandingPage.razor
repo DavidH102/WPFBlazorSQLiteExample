@@ -68,8 +68,9 @@
 
     async Task AddRandom()
     {
-        productcontext.Attach(new Product { Name = "Name", Category = new Category { Name = "cat name" } });
-        await productcontext.SaveChangesAsync();
+        Random random = new Random();
+        productcontext.Attach(new Product { Name = "Name", CategoryId = random.Next(productcontext.Categories.First().CategoryId, productcontext.Categories.OrderBy(x => x.CategoryId).Last().CategoryId) });
+    await productcontext.SaveChangesAsync();
         Snackbar.Add("New Item Added");
     }
 
