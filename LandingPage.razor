@@ -19,13 +19,11 @@
                         {
                             <MudCard Class="ma-1">
                                 <MudCardContent>
-                                    <MudText><b>Catagory Name:</b> @item.Name</MudText>
+                                    <MudText><b>Catagory Name:</b> @item.Name <b>Id:</b> @item.CategoryId</MudText>
 
                                     @foreach (var SubItem in item.Products)
                                     {
-                                        <MudText Typo="Typo.body2"><b>Product Name:</b> @SubItem.Name</MudText>
-                                        <MudText><b>ProductId:</b> @SubItem.ProductId</MudText>
-                                        <MudText><b>CategoryId:</b> @SubItem.CategoryId</MudText>
+                                        <MudText Typo="Typo.body2"><b>Product Name:</b> @SubItem.Name <b>ProductId:</b> @SubItem.ProductId</MudText>                                  
                                     }
                                 </MudCardContent>
                             </MudCard>
@@ -35,7 +33,7 @@
             </MudTabPanel>
             <MudTabPanel Text="THE BUTTON" Disabled="!showdata">
                 <MudItem Class="pa-8 ma-8">
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" OnClick="AddRandom">Add Random Data to Database</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" OnClick="AddRandomProduct">Add Random Data to Database</MudButton>
                 </MudItem>
             </MudTabPanel>
             <MudTabPanel Text="New Product">
@@ -55,23 +53,79 @@
     </MudMainContent>
 </MudLayout>
 @code {
-    private int currentCount = 0;
+
     bool showdata;
 
     protected override async Task OnInitializedAsync()
     {
         await productcontext.Database.EnsureCreatedAsync();
-
-        await AddRandom();
+        await AddRandomCategory();
+        await AddRandomProduct();
         showdata = true;
     }
 
-    async Task AddRandom()
+    async Task AddRandomCategory()
     {
-        Random random = new Random();
-        productcontext.Attach(new Product { Name = "Name", CategoryId = random.Next(productcontext.Categories.First().CategoryId, productcontext.Categories.OrderBy(x => x.CategoryId).Last().CategoryId) });
-    await productcontext.SaveChangesAsync();
-        Snackbar.Add("New Item Added");
+        if (productcontext.Categories.Any())
+        {
+            //skipping
+        }
+        else
+        {
+            productcontext.Attach(new Category { Name = "First Category" });
+            productcontext.Attach(new Category { Name = "Second Category" });
+            productcontext.Attach(new Category { Name = "Third Category" });
+            productcontext.Attach(new Category { Name = "Forth Category" });
+            productcontext.Attach(new Category { Name = "Fith Category" });
+        }
+
+        await productcontext.SaveChangesAsync();
     }
 
+    async Task AddRandomProduct()
+    {
+        Random random = new Random();
+        int min = 1;
+        int max = 1;
+        if (productcontext.Categories.Any())
+        {
+            List<int> AllCats = productcontext.Categories.Select(x => x.CategoryId).ToList();
+            min = AllCats.First();
+            max = AllCats.Last() + 1;
+        }
+        productcontext.Attach(new Product { Name = MagicalProductNameCreator(max), CategoryId = random.Next(min, max), });
+        await productcontext.SaveChangesAsync();
+        Snackbar.Add("New Item Added", Severity.Normal);
+  
+    }
+
+
+    public string MagicalProductNameCreator(int requestedLength)
+    {
+        Random rnd = new Random();
+        string[] consonants = { "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z" };
+        string[] vowels = { "a", "e", "i", "o", "u" };
+
+        string word = "";
+
+        if (requestedLength == 1)
+        {
+            word = GetRandomLetter(rnd, vowels);
+        }
+        else
+        {
+            for (int i = 0; i < requestedLength; i += 2)
+            {
+                word += GetRandomLetter(rnd, consonants) + GetRandomLetter(rnd, vowels);
+            }
+
+            word = word.Replace("q", "qu").Substring(0, requestedLength); // We may generate a string longer than requested length, but it doesn't matter if cut off the excess.
+        }
+
+        return word;
+    }
+    private static string GetRandomLetter(Random rnd, string[] letters)
+    {
+        return letters[rnd.Next(0, letters.Length - 1)];
+    }
 }
