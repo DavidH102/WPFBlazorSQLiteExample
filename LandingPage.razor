@@ -1,4 +1,5 @@
 ﻿@inject ProductContext productcontext
+@inject ISnackbar Snackbar
 <MudThemeProvider IsDarkMode="true" />
 <MudDialogProvider />
 <MudSnackbarProvider />
@@ -39,7 +40,12 @@
       <WpfApp1.RazorFiles.SalesGraph/>
             </MudTabPanel>         
             <MudTabPanel Text="Other" Disabled="!showdata">
-                <button class="btn btn-primary" @onclick="AddRandom">Click me</button>
+                <MudItem Class="pa-8 ma-8">
+
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" OnClick="AddRandom">Add Random Data to Database</MudButton>
+                </MudItem>
+                
+       
             </MudTabPanel>  
             <MudTabPanel Text="Loader" Disabled="!showdata">
 <WpfApp1.RazorFiles.Loader/>
@@ -63,10 +69,7 @@
     {
         productcontext.Attach(new Product { Name = "Name", Category = new Category { Name = "cat name" } });
         await productcontext.SaveChangesAsync();
+        Snackbar.Add("New Item Added");
     }
 
-    private void IncrementCount()
-    {
-        currentCount++;
-    }
 }
