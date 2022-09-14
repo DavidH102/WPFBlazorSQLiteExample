@@ -4,11 +4,9 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudMainContent  Class="pt-0">
+    <MudMainContent Class="pt-0">
         <MudTabs Elevation="4" Rounded="true" Centered="true" Color="@Color.Primary">
             <MudTabPanel Text="Intro">
-          
-
             </MudTabPanel>
             <MudTabPanel Text="Show Data" Disabled="!showdata">
                 @if (showdata)
@@ -24,34 +22,28 @@
                                     {
                                         <MudText Typo="Typo.body2">@SubItem.Name</MudText>
                                     }
-
                                 </MudCardContent>
-
                             </MudCard>
                         }
                     }
                 }
             </MudTabPanel>
             <MudTabPanel Text="New Product">
-          
-
-
+                <WpfApp1.RazorFiles.Product />
             </MudTabPanel>
             <MudTabPanel Text="New Category" Disabled="!showdata">
-              
-
-            </MudTabPanel>     
-            <MudTabPanel Text="New Category" Disabled="!showdata">
-
+                <WpfApp1.RazorFiles.Category />
+            </MudTabPanel>
+            <MudTabPanel Text="Sales" Disabled="!showdata">
+      <WpfApp1.RazorFiles.SalesGraph/>
+            </MudTabPanel>         
+            <MudTabPanel Text="Other" Disabled="!showdata">
                 <button class="btn btn-primary" @onclick="AddRandom">Click me</button>
-
+            </MudTabPanel>  
+            <MudTabPanel Text="Loader" Disabled="!showdata">
+<WpfApp1.RazorFiles.Loader/>
             </MudTabPanel>
         </MudTabs>
-        
-       
-
-
-
     </MudMainContent>
 </MudLayout>
 @code {
@@ -66,12 +58,12 @@
         showdata = true;
     }
 
-
     async Task AddRandom()
     {
         productcontext.Attach(new Product { Name = "Name", Category = new Category { Name = "cat name" } });
         await productcontext.SaveChangesAsync();
     }
+
     private void IncrementCount()
     {
         currentCount++;
