@@ -13,7 +13,7 @@
             <MudTabPanel Text="Show Data" Disabled="!showdata">
                 @if (showdata)
                 {
-                    @if (productcontext.Products.Any())
+                    @if (productcontext.Products != null && productcontext.Products.Any() && productcontext.Categories != null && productcontext.Categories.Any())
                     {
                         @foreach (var item in productcontext.Categories)
                         {
@@ -65,7 +65,7 @@
 
     async Task AddRandomCategory()
     {
-        if (productcontext.Categories.Any())
+        if (productcontext.Categories != null && productcontext.Categories.Any())
         {
             //skipping
         }
@@ -85,7 +85,7 @@
     {
         int min = 1;
         int max = 1;
-        if (productcontext.Categories.Any())
+        if (productcontext.Categories != null && productcontext.Categories.Any())
         {
             List<int> AllCats = productcontext.Categories.Select(x => x.CategoryId).ToList();
             min = AllCats.First();
